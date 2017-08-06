@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import rbac.sunprakon.kittisak.myrbac.R;
 import rbac.sunprakon.kittisak.myrbac.manager.MyAlert;
+import rbac.sunprakon.kittisak.myrbac.manager.PostUserToServer;
 
 /**
  * Created by Administrator on 6/8/2560.
@@ -64,12 +65,33 @@ public class SignUpFragment extends Fragment {
                 } else {
                     //No Space
                     Log.d("6AugV1", "No Space");
+                    uploadValue();
 
                 }
 
 
             } //OnClick
         });
+    }
+
+    private void uploadValue() {
+        try {
+            PostUserToServer postUserToServer = new PostUserToServer(getActivity());
+            postUserToServer.execute(nameString,userString,passwordString,"http://androidthai.in.th/rbac/addDataMaster123.php");
+            String strResult = postUserToServer.get();
+            Log.d("6AugV1", "Result ==>" + strResult);
+
+            if (Boolean.parseBoolean(strResult)) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction().replace(R.id.mainContainer, new MainFragment())
+                        .commit();
+            } else {
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void backController() {
